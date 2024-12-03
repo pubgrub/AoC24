@@ -1,4 +1,5 @@
 use file;
+use regex::Regex;
 
 const TEST: i32 = 0;
 
@@ -11,6 +12,9 @@ fn main() {
 
 fn solve1(lines: &Vec<String>) -> i32 {
     let mut result: i32 = 0;
+    let re = Regex::new(r"(mul\(\d+,\d+\))").unwrap();
+    for line in lines {}
+
     result
 }
 

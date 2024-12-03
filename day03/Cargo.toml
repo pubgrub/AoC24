@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 file = { path = "../file"}
+regex = "1.11.1"
