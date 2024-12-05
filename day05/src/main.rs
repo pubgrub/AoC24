@@ -25,10 +25,12 @@ fn solve1(lines: &Vec<String>) -> i32 {
             false_pairs.push((right, left));
         } else  {
             let pages:Vec<&str> = line.split(",").collect();
-            for (i,p) in pages[..pages.len()-1].iter().enumerate() {
-                if false_pairs.contains(&(*p,pages[i+1])) {
-                    continue 'line;
-                }
+            for i in 0..pages.len() - 1 {
+                for j in i+1..pages.len() {
+                    if false_pairs.contains(&(pages[i],pages[j])) {
+                        continue 'line;
+                    }
+                }  
             }
             result += pages[pages.len() / 2].parse::<i32>().unwrap();
         }
@@ -55,13 +57,15 @@ fn solve2(lines: &Vec<String>) -> i32 {
             while changed {
                 changed = false;
                 for i in 0..pages.len() - 1 {
-                    if false_pairs.contains(&(pages[i],pages[i+1])) {
-                        pages.swap(i, i+1);
-                        changed = true;
-                    }
-                }
+                    for j in i+1..pages.len() {
+                        if false_pairs.contains(&(pages[i],pages[j])) {
+                            pages.swap(i, j);
+                            changed = true;
+                        }
+                    }  
+               }
             }
-                result += pages[pages.len() / 2].parse::<i32>().unwrap();
+            result += pages[pages.len() / 2].parse::<i32>().unwrap();
         }
     }
     result
