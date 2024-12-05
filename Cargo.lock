@@ -42,6 +42,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "day05"
+version = "0.1.0"
+dependencies = [
+ "file",
+ "regex",
+]
+
+[[package]]
 name = "file"
 version = "0.1.0"
 
