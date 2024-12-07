@@ -13,12 +13,10 @@ fn solve1(lines: &Vec<String>) -> i64 {
     let mut result: i64 = 0;
     let mut goal_str;
     let mut vals_str;
-    let mut goal: i64;
-    let mut vals: Vec<i64>;
     for line in lines {
         (goal_str, vals_str) = line.split_once(": ").unwrap();
-        goal = goal_str.parse().unwrap();
-        vals = vals_str.split(" ").map(|s| s.parse().unwrap()).collect();
+        let goal = goal_str.parse().unwrap();
+        let vals = vals_str.split(" ").map(|s| s.parse().unwrap()).collect();
         if s1(&vals, 1, vals[0], goal) == goal {
             result += goal;
         }
@@ -30,12 +28,10 @@ fn solve2(lines: &Vec<String>) -> i64 {
     let mut result: i64 = 0;
     let mut goal_str;
     let mut vals_str;
-    let mut goal: i64;
-    let mut vals: Vec<i64>;
     for line in lines {
         (goal_str, vals_str) = line.split_once(": ").unwrap();
-        goal = goal_str.parse().unwrap();
-        vals = vals_str.split(" ").map(|s| s.parse().unwrap()).collect();
+        let goal = goal_str.parse().unwrap();
+        let vals = vals_str.split(" ").map(|s| s.parse().unwrap()).collect();
         if s2(&vals, 1, vals[0], goal) == goal {
             result += goal;
         }
