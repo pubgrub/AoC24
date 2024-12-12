@@ -1,7 +1,7 @@
 use file;
 use std::collections::HashSet;
 
-const TEST:i32 = 0;
+const TEST:i32 = 1;
 
 fn main() {
     let day = env!("CARGO_PKG_NAME");
@@ -24,19 +24,22 @@ fn solve1(lines:&Vec<String>) -> i32 {
     let offs = vec![- (width as i32), 1, width as i32, -1];
     for i in 0..grid.len() {
         let mut todo:HashSet<usize> = HashSet::new();
-        let c = &grid[i..i+1];
-        if "._".contains( c ) {
+        let c = String::from(&grid[i..i+1]);
+        if "._".contains( &c ) {
             continue;
         }
         todo.insert(i);
         let mut area = 1;
         let mut fence = 0;
+        let mut test_pos = 0;
         while todo.len() > 0 {
+            println!("{}",todo.len());
             let akt_pos = todo.iter().next().unwrap().clone();
             todo.remove(&akt_pos);
+            area +=1;
             for off in &offs {
                 
-                let test_pos = (akt_pos as i32 + off) as usize;
+                test_pos = (akt_pos as i32 + off) as usize;
                 let test_field = &grid[test_pos..test_pos+1];
                 match test_field {
                     "." => fence += 1,
@@ -50,8 +53,12 @@ fn solve1(lines:&Vec<String>) -> i32 {
                 }
                      
             }
+            grid.replace_range(test_pos..test_pos+1,"_");
         }
+    result += area * fence;
+    println!("{} {} {}",c,area,fence);
     }
+
 
     result
 }

@@ -24,7 +24,7 @@ fn solve1(lines:&Vec<String>) -> i32 {
 
     for i in 0..levels.len() {
         if levels[i] == 0 {
-            let mut nines:Vec<usize> = vec![];
+            let nines:Vec<usize> = vec![];
             result += climb1(i, &levels, &offs, nines).len() as i32;
         }
     }
@@ -64,12 +64,13 @@ fn solve2(lines:&Vec<String>) -> i32 {
 
     for i in 0..levels.len() {
         if levels[i] == 0 {
-            let mut nines:i32= 0;
+            let nines:i32= 0;
             result += climb2(i, &levels, &offs, nines);
         }
     }
     result
 }
+
 fn climb2
 (pos:usize, levels:&Vec<i32>, offs:&Vec<i32>,mut nines:i32) -> i32{
     let level = levels[pos];
