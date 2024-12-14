@@ -104,10 +104,15 @@ dependencies = [
 name = "day12"
 version = "0.1.0"
 dependencies = [
+ "debug",
  "file",
  "itertools",
  "regex",
 ]
+
+[[package]]
+name = "debug"
+version = "0.1.0"
 
 [[package]]
 name = "either"
