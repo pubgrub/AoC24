@@ -68,9 +68,8 @@ fn solve2(lines:&Vec<String>) -> usize {
 }
 
 fn s2(prog:&Vec<usize>,pos:usize,a:usize) -> usize {
-    if pos == prog.len(){
-        return a;
-    }
+    if pos == prog.len() { return a}
+
     let mut b;
     let mut c;
     let mut res:usize = MAX as usize;
