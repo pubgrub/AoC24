@@ -1,8 +1,8 @@
 use file;
-use std::{collections::HashMap, ops::Index};
 use indexmap::IndexSet;
+use std::collections::HashMap;
 
-const TEST: i32 = 0;
+const TEST: i32 = 1;
 
 fn main() {
     let day = env!("CARGO_PKG_NAME");
@@ -69,37 +69,74 @@ fn s1(
 fn solve2(lines: &Vec<String>) -> i32 {
     let mut result: i32 = 0;
     let pattern: Vec<&str> = lines[0].split(", ").collect();
-    println!("{:?}", pattern);
+    //println!("{:?}", pattern);
 
     for l in &lines[2..lines.len()] {
         println!("{}", l);
-        let mut pat: Vec<&str> = vec![];
-        let mut pat_mult: Vec<i32> = vec![];
+        let mut pat: IndexSet<String> = IndexSet::new();
+        let mut pat_mult: Vec<u128> = vec![];
         for p in &pattern {
             if l.contains(p) {
-                pat.push(p);
+                pat.insert(p.to_string());
                 pat_mult.push(1);
             }
         }
-        for i in 0..pat.len() {
-            for j in 0..pat.len() {
-                let comb_str = pat[i].to_string() + pat[j];
-                if l.contains(comb_str.as_str()) {
-                    if ! pat.contains(comb_str) {
-                        pat.push(&comb_str);
-                        pat_mult.push(pat_mult[i] * pat_mult[j]);
-                    else {
-                        pat_mult[pat.  ]
+        println!("usable pattern: {}\n{:?}", pat.len(), pat);
+        let mut start_j = 0;
+        while start_j < pat.len() {
+            let old_len = pat.len();
+            for i in 0..old_len {
+                for j in start_j..old_len {
+                    let comb_str =
+                        pat.get_index(i).unwrap().to_string() + pat.get_index(j).unwrap();
+                    if l.contains(&comb_str) {
+                        if !pat.contains(&comb_str) {
+                            // println!(
+                            //     "new pat: {} + {} -> {}",
+                            //     pat.get_index(i).unwrap(),
+                            //     pat.get_index(j).unwrap(),
+                            //     comb_str
+                            // );
+                            pat.insert(comb_str.clone());
+                            pat_mult.push(pat_mult[i] * pat_mult[j]);
+                        } else {
+                            let pat_index = pat.get_index_of(comb_str.as_str()).unwrap();
+                            if i != j {
+                                // println!(
+                                //     "old pat: {} + {} -> {} * {} = {}",
+                                //     pat.get_index(i).unwrap(),
+                                //     pat.get_index(j).unwrap(),
+                                //     pat_mult[i],
+                                //     pat_mult[j],
+                                //     pat_mult[pat_index]
+                                // );
+                                pat_mult[pat_index] += pat_mult[i] * pat_mult[j];
+                            }
+                        }
                     }
-
-
-                        if pat
                 }
             }
+            for i in 0..pat.len() {
+                print!("{:?}: {} ", pat.get_index(i).unwrap(), pat_mult[i]);
+            }
+            println!();
+            start_j = old_len + 1;
         }
-        println!("pattern: {}, local: {}", pattern.len(), pat.len());
-
-        result += s2(&pat, l, &"".to_string(), vec![]);
+        println!(
+            "pattern: {}, combined pattern: {}",
+            pattern.len(),
+            pat.len()
+        );
+        if pat.contains(l) {
+            println!(
+                "solution for {}: {}",
+                l,
+                pat_mult[pat.get_index_of(l).unwrap() as usize]
+            );
+        } else {
+            println!("no solution for : {}", l);
+        }
+        //result += s2(&pat, l, &"".to_string(), vec![]);
         //println!("result: {}", result);
     }
     result
