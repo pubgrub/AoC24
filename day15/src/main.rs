@@ -4,7 +4,7 @@ use debug::{self, pause};
 use file;
 use itertools::Itertools;
 
-const TEST: i32 = 0;
+const TEST: i32 = 1;
 
 fn main() {
     let day = env!("CARGO_PKG_NAME");
@@ -155,14 +155,16 @@ fn solve2(lines: &Vec<String>) -> i32 {
                     }
                 } else {
                     // up-down
-                    let move_rows: Vec<Vec<i32>> = vec![vec![cursor]];
-                    let mut pushing_row = move_rows.len();
-                    loop {
-                        for i in move_rows[pushing_row].iter() {
-                            let pushing_block = move_rows[pushing_row][*i as usize];
+                    let mut do_move:bool;
+                    let mut tiles_to_move:Vec<i32> = vec![];
+                    let mut ret_tiles_to_move:Vec<i32>;
+                    let (do_move, mut ret_tiles_to_move) = walk(&map, tiles_to_move, cursor, off);
+                    if do_move == true {
+                        ret_tiles_to_move.reverse();
+                        for t in &ret_tiles_to_move {
+                            map[*t as usize + off as usize] = map[*t as usize];
+                            map[*t as usize] = 3;
                         }
-
-                        next_pos += off;
                     }
                 }
             }
@@ -174,8 +176,33 @@ fn solve2(lines: &Vec<String>) -> i32 {
         }
     }
 
-    fn walk() -> (bool, Vec<i32>) {
-        (false, vec![])
+    fn walk(map:&Vec<usize>,mut to_move:Vec<i32>,cursor:i32,off:i32) -> (bool, Vec<i32>) {
+        let mut is_valid:bool;
+        
+        if map[cursor as usize] == 2 {
+            return (false,vec![]);
+        }
+        if map[cursor as usize] == 3 {
+            to_move.push(cursor);
+            return( true, to_move);
+        }
+        let mut next_pos:Vec<i32> = vec![cursor + off];
+        if cursor == 0 {
+            next_pos.push(cursor + off + 1)
+        } else {
+            next_pos.push(cursor + off - 1);
+        }
+        let mut ret_to_move:Vec<i32> = vec![];
+        for p in &next_pos {
+            
+            (is_valid,ret_to_move) = walk(map,to_move, *p, off);
+            if is_valid == false {
+                return (false, vec![]);
+            }
+            to_move = ret_to_move;
+        }
+        (true, to_move)
     }
+ 
     result
 }
