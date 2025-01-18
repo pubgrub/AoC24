@@ -2,7 +2,7 @@ use file;
 use indexmap::IndexSet;
 use std::collections::HashMap;
 
-const TEST: i32 = 1;
+const TEST: i32 = 0;
 
 fn main() {
     let day = env!("CARGO_PKG_NAME");
@@ -73,72 +73,88 @@ fn solve2(lines: &Vec<String>) -> i32 {
 
     for l in &lines[2..lines.len()] {
         println!("{}", l);
-        let mut pat: IndexSet<String> = IndexSet::new();
-        let mut pat_mult: Vec<u128> = vec![];
+        let mut pat_1: Vec<String> = vec![];
         for p in &pattern {
             if l.contains(p) {
-                pat.insert(p.to_string());
-                pat_mult.push(1);
+                pat_1.push(p.to_string());
             }
         }
-        println!("usable pattern: {}\n{:?}", pat.len(), pat);
-        let mut start_j = 0;
-        while start_j < pat.len() {
-            let old_len = pat.len();
-            for i in 0..old_len {
-                for j in start_j..old_len {
-                    let comb_str =
-                        pat.get_index(i).unwrap().to_string() + pat.get_index(j).unwrap();
-                    if l.contains(&comb_str) {
-                        if !pat.contains(&comb_str) {
-                            // println!(
-                            //     "new pat: {} + {} -> {}",
-                            //     pat.get_index(i).unwrap(),
-                            //     pat.get_index(j).unwrap(),
-                            //     comb_str
-                            // );
-                            pat.insert(comb_str.clone());
-                            pat_mult.push(pat_mult[i] * pat_mult[j]);
-                        } else {
-                            let pat_index = pat.get_index_of(comb_str.as_str()).unwrap();
-                            if i != j {
-                                // println!(
-                                //     "old pat: {} + {} -> {} * {} = {}",
-                                //     pat.get_index(i).unwrap(),
-                                //     pat.get_index(j).unwrap(),
-                                //     pat_mult[i],
-                                //     pat_mult[j],
-                                //     pat_mult[pat_index]
-                                // );
-                                pat_mult[pat_index] += pat_mult[i] * pat_mult[j];
-                            }
+        //println!("usable pattern: {}\n{:?}", pat.len(), pat);
+        let mut pat_3: Vec<String> = vec![];
+        let mut pat_3_max_length = 0;
+
+        for i in &pat_1 {
+            for j in &pat_1 {
+                if l.contains(&(i.clone() + j.as_str())) {
+                    for k in &pat_1 {
+                        let lpat = i.clone() + j.as_str() + k.as_str();
+                        if l.contains(&lpat) {
+                            pat_3.push(lpat.clone());
+                            pat_3_max_length = pat_3_max_length.max(lpat.len());
                         }
                     }
                 }
             }
-            for i in 0..pat.len() {
-                print!("{:?}: {} ", pat.get_index(i).unwrap(), pat_mult[i]);
-            }
-            println!();
-            start_j = old_len + 1;
         }
-        println!(
-            "pattern: {}, combined pattern: {}",
-            pattern.len(),
-            pat.len()
-        );
-        if pat.contains(l) {
-            println!(
-                "solution for {}: {}",
-                l,
-                pat_mult[pat.get_index_of(l).unwrap() as usize]
-            );
-        } else {
-            println!("no solution for : {}", l);
-        }
-        //result += s2(&pat, l, &"".to_string(), vec![]);
-        //println!("result: {}", result);
+        //println!("len: {}\npat: {:?}", long_pattern.len(), long_pattern);
     }
+    //     let mut start_j = 0;
+    //     while start_j < pat.len() {
+    //         let old_len = pat.len();
+    //         for i in 0..old_len {
+    //             for j in start_j..old_len {
+    //                 let comb_str =
+    //                     pat.get_index(i).unwrap().to_string() + pat.get_index(j).unwrap();
+    //                 if l.contains(&comb_str) {
+    //                     if !pat.contains(&comb_str) {
+    //                         // println!(
+    //                         //     "new pat: {} + {} -> {}",
+    //                         //     pat.get_index(i).unwrap(),
+    //                         //     pat.get_index(j).unwrap(),
+    //                         //     comb_str
+    //                         // );
+    //                         pat.insert(comb_str.clone());
+    //                         pat_mult.push(pat_mult[i] * pat_mult[j]);
+    //                     } else {
+    //                         let pat_index = pat.get_index_of(comb_str.as_str()).unwrap();
+    //                         if i != j {
+    //                             // println!(
+    //                             //     "old pat: {} + {} -> {} * {} = {}",
+    //                             //     pat.get_index(i).unwrap(),
+    //                             //     pat.get_index(j).unwrap(),
+    //                             //     pat_mult[i],
+    //                             //     pat_mult[j],
+    //                             //     pat_mult[pat_index]
+    //                             // );
+    //                             pat_mult[pat_index] += pat_mult[i] * pat_mult[j];
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         for i in 0..pat.len() {
+    //             print!("{:?}: {} ", pat.get_index(i).unwrap(), pat_mult[i]);
+    //         }
+    //         println!();
+    //         start_j = old_len + 1;
+    //     }
+    //     println!(
+    //         "pattern: {}, combined pattern: {}",
+    //         pattern.len(),
+    //         pat.len()
+    //     );
+    //     if pat.contains(l) {
+    //         println!(
+    //             "solution for {}: {}",
+    //             l,
+    //             pat_mult[pat.get_index_of(l).unwrap() as usize]
+    //         );
+    //     } else {
+    //         println!("no solution for : {}", l);
+    //     }
+    //     //result += s2(&pat, l, &"".to_string(), vec![]);
+    //     //println!("result: {}", result);
+    // }
     result
 }
 

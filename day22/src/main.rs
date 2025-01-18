@@ -62,10 +62,5 @@ fn solve2(lines: &Vec<String>) -> i64 {
             }
         }
     }
-    for g in &gain {
-        if *g.1 == 2047 {
-            println!("{:?}", g.0);
-        }
-    }
     *gain.values().max().unwrap() as i64
 }
